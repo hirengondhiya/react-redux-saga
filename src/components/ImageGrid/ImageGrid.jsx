@@ -31,7 +31,7 @@ function ImageGrid() {
           </div>
         ))}
       </section>
-      <a onClick={handleClick}>Load more...</a>
+      <button onClick={handleClick}>Load more...</button>
     </div>
   );
 }
