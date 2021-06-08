@@ -6,10 +6,12 @@ import rootSaga from "../sagas/rootSaga";
 const sagaMiddleware = createSagaMiddleware();
 
 const middleware = [...getDefaultMiddleware({ thunk: false }), sagaMiddleware];
-
-export default configureStore({
+const store = configureStore({
   reducer: { imageData: imagesReducer },
   middleware: middleware,
 });
 
 sagaMiddleware.run(rootSaga);
+
+store.dispatch({ type: "HELLO", payload: "Hello Sagas!" });
+export default store;
