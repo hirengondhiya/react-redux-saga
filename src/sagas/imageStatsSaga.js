@@ -8,13 +8,14 @@ import {
 import { getImageStats } from "../api";
 
 export function* watchStatsRequest() {
-  const {
-    payload: { images },
-  } = yield take(fetchImagesSuccess.type);
-
-  for (let index = 0; index < images.length; index++) {
-    const image = images[index];
-    yield fork(handleStatRequests, image.id);
+  while (true) {
+    const {
+      payload: { images },
+    } = yield take(fetchImagesSuccess.type);
+    for (let index = 0; index < images.length; index++) {
+      const image = images[index];
+      yield fork(handleStatRequests, image.id);
+    }
   }
 }
 

@@ -3,13 +3,13 @@ import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchImages } from "../../store/imageSlice";
 import Button from "../Button";
+import ImageStats from "../Stats";
 
 function ImageGrid() {
   const dispatch = useDispatch();
   const { images, errorMessage, loading } = useSelector(
     (state) => state.imageData
   );
-  console.log({ images });
 
   const loadImages = useCallback(() => {
     dispatch(fetchImages());
@@ -28,6 +28,7 @@ function ImageGrid() {
             key={image.id}
             className={`item item-${Math.ceil(image.height / image.width)}`}
           >
+            <ImageStats imageId={image.id} />
             <img src={image.urls.small} alt={image.user.username} />
           </div>
         ))}
