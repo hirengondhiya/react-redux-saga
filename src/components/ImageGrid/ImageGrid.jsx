@@ -1,26 +1,27 @@
 import "./styles.css";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchImages } from "../../store/imageSlice";
+import Button from "../Button";
 
-const key = "5f96323678d05ff0c4eb264ef184556868e303b32a2db88ecbf15746e6f25e02";
 function ImageGrid() {
-  const [images, setImages] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {
-    fetch(`https://api.unsplash.com/photos/?client_id=${key}&per_page=28`)
-      .then((res) => res.json())
-      .then((imageData) => {
-        setImages(imageData);
-      });
-  }, []);
+  const { images, errorMessage, loading } = useSelector(
+    (state) => state.imageData
+  );
+  console.log({ images });
 
-  function handleClick() {
+  const loadImages = useCallback(() => {
     dispatch(fetchImages());
-  }
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadImages();
+  }, [dispatch, loadImages]);
 
   return (
     <div className="content">
+      {errorMessage && <div className="error">{errorMessage}</div>}
       <section className="grid">
         {images.map((image) => (
           <div
@@ -31,8 +32,11 @@ function ImageGrid() {
           </div>
         ))}
       </section>
-      <button onClick={handleClick}>Load more...</button>
+      <Button onClick={() => !loading && loadImages()} loading={loading}>
+        Load More
+      </Button>
     </div>
   );
 }
+
 export default ImageGrid;
