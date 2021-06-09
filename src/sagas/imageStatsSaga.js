@@ -1,5 +1,11 @@
-import { fork, take } from "redux-saga/effects";
+import { call, fork, put, take } from "redux-saga/effects";
 import { fetchImagesSuccess } from "../store/imageSlice";
+import {
+  fetchImageStats,
+  fetchImageStatsFailure,
+  fetchImageStatsSuccess,
+} from "../store/imageStatsSlice";
+import { getImageStats } from "../api";
 
 export function* watchStatsRequest() {
   const {
@@ -13,5 +19,23 @@ export function* watchStatsRequest() {
 }
 
 function* handleStatRequests(imageId) {
-  yield console.log({ imageId });
+  let error;
+  for (let index = 0; index < 3; index++) {
+    try {
+      yield put(fetchImageStats({ imageId }));
+      const res = yield call(getImageStats, imageId);
+      yield put(
+        fetchImageStatsSuccess({
+          imageId,
+          downloads: res.downloads.total,
+        })
+      );
+      return;
+    } catch (err) {
+      error = err;
+    }
+  }
+  yield put(
+    fetchImageStatsFailure({ imageId, errorMessage: error.toString() })
+  );
 }

@@ -6,7 +6,7 @@ export const imageStatsSlice = createSlice({
   name: "imageStats",
   initialState: initialState,
   reducers: {
-    fetchStats: (state, action) => {
+    fetchImageStats: (state, action) => {
       state[action.payload.imageId] = {
         loading: true,
         errorMessage: "",
@@ -32,8 +32,8 @@ export const imageStatsSlice = createSlice({
 
 export const {
   fetchImageStats,
-  fetchImageStatsSuccess,
   fetchImageStatsFailure,
+  fetchImageStatsSuccess,
 } = imageStatsSlice.actions;
 
 export default imageStatsSlice.reducer;
