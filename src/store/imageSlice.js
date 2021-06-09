@@ -4,6 +4,7 @@ const initialState = {
   images: [],
   loading: false,
   errorMessage: "",
+  nextPage: 1,
 };
 
 export const imageSlice = createSlice({
@@ -16,7 +17,8 @@ export const imageSlice = createSlice({
     fetchImagesSuccess: (state, action) => {
       state.loading = false;
       state.errorMessage = "";
-      state.images.push(action.payload.images);
+      state.nextPage += 1;
+      state.images.push(...action.payload.images);
     },
     fetchImagesFailure: (state, action) => {
       state.loading = false;
